@@ -1,29 +1,26 @@
 const express = require("express");
 const router = express.Router();
-const { User, Pet, Toy } = require("../models/");
+const {Pet,Toy} = require("../models/");
 
 
 //find all
 router.get("/", (req, res) => {
-  User.findAll({
-
+  Toy.findAll({
+    include:[Pet]
   })
-    .then(dbUsers => {
-      res.json(dbUsers);
+    .then(dbToys => {
+      res.json(dbToys);
     })
     .catch(err => {
       console.log(err);
       res.status(500).json({ msg: "an error occured", err });
     });
 });
-
 //find one
 router.get("/:id", (req, res) => {
-  User.findByPk(req.params.id, {
-    include: [{ model: Pet, include: [{ model: Toy }] }]
-  })
-    .then(dbUser => {
-      res.json(dbUser);
+  Toy.findByPk(req.params.id)
+    .then(dbToys => {
+      res.json(dbToys);
     })
     .catch(err => {
       console.log(err);
@@ -33,9 +30,9 @@ router.get("/:id", (req, res) => {
 
 //create user
 router.post("/", (req, res) => {
-  User.create(req.body)
-    .then(newUser => {
-      res.json(newUser);
+  Toy.create(req.body)
+    .then(newToy => {
+      res.json(newToy);
     })
     .catch(err => {
       console.log(err);
@@ -45,32 +42,32 @@ router.post("/", (req, res) => {
 
 //update user
 router.put("/:id", (req, res) => {
-  User.update(req.body, {
+  Toy.update(req.body, {
     where: {
       id: req.params.id
     }
-  }).then(updatedUser => {
-    res.json(updatedUser);
+  }).then(updatedToy => {
+    res.json(updatedToy);
   })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ msg: "an error occured", err });
-    });
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ msg: "an error occured", err });
+  });
 });
 
 //delete a user
 router.delete("/:id", (req, res) => {
-  User.destroy({
+  Toy.destroy({
     where: {
       id: req.params.id
     }
-  }).then(delUser => {
-    res.json(delUser);
+  }).then(delToy => {
+    res.json(delToy);
   })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ msg: "an error occured", err });
-    });
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ msg: "an error occured", err });
+  });
 });
 
 module.exports = router;
