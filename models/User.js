@@ -1,58 +1,25 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
-// const bcrypt = require('bcrypt');
 
 class User extends Model {}
 
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+User.init({
+    // add properites here, ex:
     email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
+         type: DataTypes.STRING,
+         unique:true,
+         allowNull:false
     },
     password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [8],
-      },
-    },
-  },
-  {
-    hooks: {
-      beforeCreate: async (newUserData) => {
-        // newUserData.password = await bcrypt.hash(newUserData.password, 10);
-        newUserData.email = await newUserData.email.toLowerCase();
-        return newUserData;
-      },
-      // Here, we use the beforeUpdate hook to make all of the characters lower case in an updated email address, before updating the database.
-      beforeUpdate: async (updatedUserData) => {
-        // updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
-        updatedUserData.email = await updatedUserData.email.toLowerCase();
-        return updatedUserData;
-      },
-    },
+        type:DataTypes.STRING,
+        allowNull:false,
+        validate:{
+            len:[8]
+        }
+    }
+    
+},{
+    sequelize
+});
 
-    sequelize,
-    timestamps: false,
-    freezeTableName: true,
-    underscored: true,
-    modelName: 'user',
-  }
-);
-
-module.exports = User;
+module.exports=User
